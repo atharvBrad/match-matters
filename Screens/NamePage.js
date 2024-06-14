@@ -6,23 +6,55 @@ export default function NamePage({ navigation }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
 
-    useEffect(() => {
-        getRegistrationProgress('Name').then(progressData => {
-          if(progressData){
-            setFirstName(progressData.firstName || '');
-            setLastName(progressData.lastName || '' );
-          }
-        })
-      });
+    // useEffect(() => {
+    //     getRegistrationProgress('Name').then(progressData => {
+    //       if(progressData){
+    //         setFirstName(progressData.firstName || '');
+    //         setLastName(progressData.lastName || '' );
+    //       }
+    //     })
+    //   });
 
-    const onPressContinue = () => {
+
+        // Use an empty dependency array to ensure this effect runs only once.
+        useEffect(() => {
+            const fetchProgress = async () => {
+                const progressData = await getRegistrationProgress('Name');
+                if (progressData) {
+                    setFirstName(progressData.firstName || '');
+                    setLastName(progressData.lastName || '');
+                }
+            };
+            fetchProgress();
+        }, []);
+
+    // const onPressContinue = () => {
+    //     if (firstName && lastName) {
+    //         if(firstName.trim() !== '' && lastName.trim() !== ''){
+    //             saveRegistrationProgress('Name', {firstName,lastName})
+    //         }
+    //         navigation.navigate('AgeScreen');
+    //     }
+    // };
+
+    const onPressContinue = async () => {
         if (firstName && lastName) {
-            if(firstName.trim() !== '' && lastName.trim() !== ''){
-                saveRegistrationProgress('Name', {firstName,lastName})
+            if (firstName.trim() !== '' && lastName.trim() !== '') {
+                try {
+                    await saveRegistrationProgress('Name', { firstName, lastName });
+                    // Clear the input fields
+                    // setFirstName('');
+                    // setLastName('');
+                    // Navigate to the next screen
+                    navigation.navigate('AgeScreen');
+                } catch (error) {
+                    console.error('Error saving registration progress: ', error);
+                }
             }
-            navigation.navigate('AgeScreen');
         }
     };
+
+
 
     return (
         <SafeAreaView style={styles.area}>

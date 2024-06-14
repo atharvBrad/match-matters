@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SplashScreenView from './SplashScreenView';
+// import OnboardingCarousel from './Screens/OnboardingCarousel ';
 import Login from './Screens/Login';
 import SignNumber from './Screens/SignNumber';
 import OtpScreen from './Screens/OtpScreen';
@@ -20,6 +21,10 @@ import LikedYou from './HomeScreens/LikedYou';
 import Chat from './HomeScreens/Chat';
 import ForYou from './HomeScreens/ForYou';
 import LastScreen from './Screens/LastScreen';
+// import OnboardingScreen1 from './Screens/OnboardingScreen1';
+// import OnboardingScreen2 from './Screens/OnboardingScreen2';
+// import OnboardingScreen3 from './Screens/OnboardingScreen3';
+import OnboardingScreen from './Screens/OnboardingScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -46,13 +51,47 @@ const App = () => {
         options={{ headerShown: false }}
       />
     ) : (
+      <>
+      {/* <Stack.Screen
+        name="OnboardingScreen1"
+        component={OnboardingScreen1}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="OnboardingScreen2"
+        component={OnboardingScreen2}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="OnboardingScreen3"
+        component={OnboardingScreen3}
+        options={{ headerShown: false }}
+      /> */}
+      <Stack.Screen
+        name="OnboardingScreen"
+        component={OnboardingScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Login"
         component={Login}
         options={{ headerShown: false }}
       />
+    </>
+    //   <Stack.Screen
+    //   name="Login"
+    //   component={Login}
+    //   options={{ headerShown: false }}
+    // />
+    //   <Stack.Screen
+    //     name="OnboardingCarousel"
+    //     component={OnboardingCarousel}
+    //     options={{ headerShown: false }}
+    //   />
     )}
-    <Stack.Screen
+    
+
+      <Stack.Screen
         name="SignNumber"
         component={SignNumber}
         options={{ headerShown: false }}

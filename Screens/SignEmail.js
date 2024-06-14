@@ -14,15 +14,26 @@ export default function SignEmail({ navigation }) {
 
     const onChangeEmail = (email) => {
         setEmailId(email);
+        setIsValidEmail(true);
     };
 
+    // useEffect(() => {
+    //   getRegistrationProgress('Email').then(progressData => {
+    //     if(progressData){
+    //       setEmailId(progressData.emailId || '');
+    //     }
+    //   })
+    // });
+
     useEffect(() => {
-      getRegistrationProgress('Email').then(progressData => {
-        if(progressData){
-          setEmailId(progressData.emailId || '');
-        }
-      })
-    });
+      const fetchProgress = async () => {
+          const progressData = await getRegistrationProgress('Email');
+          if (progressData) {
+              setEmailId(progressData.emailId || '');
+          }
+      };
+      fetchProgress();
+  }, []);
 
 
     // const onPressContinue = () => {
@@ -37,19 +48,24 @@ export default function SignEmail({ navigation }) {
     //     }
     // };
 
-
-    const onPressContinue = () => {
+    const onPressContinue = async () => {
       if (emailId && validateEmail(emailId)) {
           if (emailId.trim() !== '') {
-              saveRegistrationProgress('Email', { emailId }).then(() => {
-              });
-              navigation.navigate('EmailOTPScreen');
-              setEmailId('');
+              try {
+                  await saveRegistrationProgress('Email', { emailId });
+                  // Clear the input fields
+                  // setEmailId('');
+                  // Navigate to the next screen
+                  navigation.navigate('EmailOTPScreen');
+              } catch (error) {
+                  console.error('Error saving registration progress: ', error);
+              }
           }
       } else {
           setIsValidEmail(false);
       }
   };
+
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -64,15 +80,15 @@ export default function SignEmail({ navigation }) {
         setFocusInput(false);
     };
 
-    // useEffect(() => {
-    //     textInput.focus();
-    // }, []);
-
     useEffect(() => {
-      if (textInput.current) {
-          textInput.current.focus();
-      }
+        textInput.focus();
     }, []);
+
+    // useEffect(() => {
+    //   if (textInput.current) {
+    //       textInput.current.focus();
+    //   }
+    // }, []);
 
     return (
         <SafeAreaView style={styles.area}>

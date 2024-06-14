@@ -41,11 +41,11 @@ app.post("/register", async(req,res) => {
         const newUser = new User(userData);
 
         await newUser.save();
-        res.send("hello");
+        res.send("data entered");
 
         // const secretKey = crypto.randomBytes(32).toString("hex");
 
-        // const token  = jwt.sign({userId:newUser._id,secretKey})
+        // const token  = jwt.sign({userId: newUser._id}, secretKey);
 
         // res.status(200).json({token});
 
@@ -56,3 +56,22 @@ app.post("/register", async(req,res) => {
     }
 })
 
+app.get("/getAllUser", async (req, res) => {
+    try {
+        const allUser = await User.find({});
+        res.send({status: "ok", data: allUser});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({status: "error", message: "Internal Server Error"});
+    }
+});
+
+app.get("/getLatestUser", async (req, res) => {
+    try {
+        const latestUser = await User.findOne({}).sort({ _id: -1 }).exec();
+        res.send({ status: "ok", data: latestUser });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ status: "error", message: "Internal Server Error" });
+    }
+});

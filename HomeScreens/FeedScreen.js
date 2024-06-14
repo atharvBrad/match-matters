@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet, Image, Animated } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Video } from 'expo-av';
 import icon from "../assets/Match matters logo (1).png";
 
 export default function FeedScreen({ navigation }) {
   const fadeAnimation = useRef(new Animated.Value(0)).current;
+  // const { userData } = route.params;
+  // const [data, setData] = useState([]);
+  const [data, setData] = useState(''); 
 
   useEffect(() => {
     Animated.timing(fadeAnimation, {
@@ -14,6 +17,27 @@ export default function FeedScreen({ navigation }) {
       useNativeDriver: true,
     }).start();
   }, [fadeAnimation]);
+
+  // useEffect(() => {
+  //   fetch("http://192.168.1.37:4000/getAllUser",{
+  //     method:"GET",    
+  //   }).then((res) => res.json()).then((data) => {
+  //     console.log(data, "userData");
+  //     setData(data.data);
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    fetch("http://192.168.43.98:4000/getLatestUser", {
+      method: "GET",    
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("userData from /lastestUser", data);
+      setData(data.data);
+    });
+  }, []);
+
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnimation }]}>
@@ -35,12 +59,28 @@ export default function FeedScreen({ navigation }) {
           style={styles.video}
         />
       </View>
+      {/* {data.map(i => {
+            return(
+              <View>
+                <Text>{i.firstName}</Text>
+                <Text>{i.age}</Text>
+              </View>
+            )
+          })} */}
+{/* 
+{data && ( // Add a check to ensure data is not null before mapping
+        <View>
+          <Text>{data.firstName}</Text>
+          <Text>{data.age}</Text>
+        </View>
+      )} */}
       <View style={styles.overlay}>
         <View style={styles.logoWrapper}>
           {/* <Image source={icon} style={styles.image} /> */}
-          <Text style={styles.Name}>Suyash Bansod, 22</Text>
-          <Text style={styles.Profession}>Software Engineer</Text>
-          <Text style={styles.tagLine}>I love Football</Text>
+          <Text style={styles.Name}>{data.firstName}</Text>
+          <Text style={styles.Name}>{data.age}</Text>
+          {/* <Text style={styles.Profession}></Text>
+          <Text style={styles.tagLine}>I love Football</Text> */}
         </View>
       </View>
     </Animated.View>
